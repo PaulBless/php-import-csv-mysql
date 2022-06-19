@@ -1,9 +1,10 @@
 <?php
 session_start();
 
+## Add DB File
 require_once('../core/DBConnection.php');
-require_once('../core/CountryController.php');
 
+// new object of the db class instantiated
 $db = new DatabaseConnection;
     
 if(!empty($_FILES["file"]["name"]))
@@ -43,21 +44,23 @@ if(!empty($_FILES["file"]["name"]))
             $officialName = mysqli_real_escape_string($db->connection,$getData[3]);
             $symbol = mysqli_real_escape_string($db->connection,$getData[4]);
 
-            // check if currency record already exist in db
-            $check_if_country_exist = $db->connection->query("SELECT * FROM `tbl_currencies` WHERE `common_name` = '{$getData[2]}'");
-            if($check_if_country_exist->num_rows > 0){
-                echo "Currency '".$commonName."' Already Exists"; return;
-            } 
+            // // check if currency record already exist in db
+            // $check_if_country_exist = $db->connection->query("SELECT * FROM `tbl_currencies` WHERE `common_name` = '{$getData[2]}'");
+            // if($check_if_country_exist->num_rows > 0){
+            //     echo "Currency '".$commonName."' Already Exists"; return;
+            // } 
             
             // add country to db
-            $sql = "INSERT INTO `tbl_currencies` (`iso_code`, `iso_numeric_code`, `common_name`, `official_name`, `symbol`) VALUES (?,?,?,?,?)";
-
+            // $sql = "INSERT INTO `tbl_currencies` (`iso_code`, `iso_numeric_code`, `common_name`, `official_name`, `symbol`) VALUES (?,?,?,?,?)";
             // prepare sql query statement
-            $statement = $db->connection->prepare($sql);
-            $statement->bind_param("sssss", $isoCode, $isoNumericCode, $commonName, $officialName, $symbol);
+            // $statement = $db->connection->prepare($sql);
+            // $statement->bind_param("sssss", $isoCode, $isoNumericCode, $commonName, $officialName, $symbol);
+            // // execute query
+            // $statement->execute();
+            
 
-            // execute query
-            $statement->execute();
+            $sqlQuery = "INSERT INTO `tbl_currencies` (`iso_code`, `iso_numeric_code`, `common_name`, `official_name`, `symbol`) VALUES ('{$isoCode}', '{$isoNumericCode}', '{$commonName}', '{$officialName}', '{$symbol}')";
+            $runQuery = $db->connection->query($sqlQuery);
                    
         }
 

@@ -1,9 +1,10 @@
 <?php
 session_start();
 
+## Add DatabaseConnection File
 require_once('../core/DBConnection.php');
-require_once('../core/CountryController.php');
 
+// new instance of db class
 $db = new DatabaseConnection;
     
 if(!empty($_FILES["file"]["name"]))
@@ -49,11 +50,11 @@ if(!empty($_FILES["file"]["name"]))
             $endonym = mysqli_real_escape_string($db->connection,$getData[9]);
             $demonym = mysqli_real_escape_string($db->connection,$getData[10]);
 
-            // check if country record already exist
-            $check_if_country_exist = $db->connection->query("SELECT * FROM tbl_countries WHERE `common_name` = '{$getData[7]}'");
-            if($check_if_country_exist->num_rows > 0){
-                echo "country_exists"; return;
-            } 
+            /** check if country record already exist in table */ 
+            // $check_if_country_exist = $db->connection->query("SELECT * FROM tbl_countries WHERE `common_name` = '{$commonName}'");
+            // if($check_if_country_exist->num_rows > 0){
+            //     echo "country_exists"; return;
+            // } 
             
             // add country to db
             $sql = "INSERT INTO `tbl_countries` (`continent_code`, `currency_code`, `iso2_code`, `iso3_code`, `iso_numeric_code`, `fips_code`, `calling_code`, `common_name`, `official_name`, `endonym`, `demonym`) VALUES (?,?,?,?,?,?,?,?,?,?,?)";

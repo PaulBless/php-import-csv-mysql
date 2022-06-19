@@ -15,10 +15,10 @@ SET time_zone = "+00:00";
 
 
 -- Create Database
-CREATE DATABASE IF NOT EXISTS `agpaytech_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE IF NOT EXISTS `import_csv_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 -- Select Database
-USE `agpaytech_db`;
+USE `import_csv_db`;
 
 
 -- Table Structure for Countries

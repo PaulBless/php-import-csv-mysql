@@ -1,8 +1,9 @@
 <?php 
 
-
+## Add Database File
 require_once('../core/DBConnection.php');
 $db = new DatabaseConnection;
+
 
 ## Read value
 $draw = $_POST['draw'];

@@ -1,10 +1,30 @@
+<?php
+    
+    // * Check if Required Database for the Application is Installed on Server
+    $link = mysqli_connect('localhost', 'root', '');
+    
+    if (!$link) {
+        die('Server Not Connected, MySQL Not Installed: '. mysqli_connect_error($link));
+        echo "<script>alert('Sorry, MySQL Server Not Found...' );</script>";
+    }else{
+        
+        // select database
+        $db_selected = mysqli_select_db($link, 'import_csv_db');
+        if (!$db_selected) {
+            echo "<script>alert('Required database for application not found.. Click OK to install now!'); window.location.href='install.php';</script>";
+        }
+    }
+
+    require_once('core/DBConnection.php');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countries Currencies Project</title>
+    <title>Import CSV Project</title>
 
     <!-- Import Frontend Libraries -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -39,7 +59,7 @@
 <body>
     
     <h1 class="text-3xl font-bold text-center underline bg-gray-100 text-clifford p-4" >
-        Countries & Currencies Import/Export CSV to Database
+        Import CSV to Database
     </h1>
 
     <div class="container">
@@ -49,7 +69,7 @@
                     <div class="card-header">Countries Table</div>
                     
                     <div class="col-md-3">
-                        <button class='btn btn-info country-btn mt-3 mb-3 ml-4 mr-4' >Import Countries CSV</button>
+                        <button class="btn btn-info country-btn mt-3 mb-3 ml-4 mr-4" data-toggle="modal" data-target="#importCountryModal">Import Countries CSV</button>
                     </div>
                   
                     <div class="card-body">
@@ -118,7 +138,7 @@
           <div class="modal-content">
             <div class="modal-header bg-info">
               <h6 class="modal-title text-white font-weight-bold" id="conveyanceModalLabel">Choose Country CSV</h6>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
@@ -129,13 +149,12 @@
                         <label>Select File </label>
                         <input type="file" name="file" id="file" class="form-control" accept=".xlsx, .xls, .csv" required/>
                     </div>
-
                             
                 </div>
                 <div class="modal-footer">
                   <button type="submit" name="upload" class="btn btn-success mr-3" style="background-color:#28a745!important">Upload File</button>
-                  <!-- <button type="button" class="btn btn-secondary " data-dismiss="modal">Close</button> -->
-              </form>
+                  <button type="button" class="btn btn-secondary bg-secondary " data-dismiss="modal">Close</button>
+              </form> </div>
             </div>
           </div>
         </div>
@@ -161,7 +180,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="submit" name="upload" class="btn btn-success mr-3" style="background-color:#28a745!important">Upload File</button>
-                  <!-- <button type="button" class="btn btn-secondary " data-dismiss="modal">Close</button> -->
+                  <button type="button" class="btn btn-secondary bg-secondary" data-dismiss="modal">Close</button>
               </form>
             </div>
           </div>
@@ -172,8 +191,10 @@
     </div>
    
     <script type="text/javascript">
+        
         // fetch the list of countries
         function getCountries() {
+            
             $('#countries-table').dataTable({
             paging: true,
             searching: true,
@@ -224,6 +245,10 @@
         
         // fetch list of currencies
         function getCurrencies() {
+            // hide the upload file modal
+            $('#importCurrencyModal').trigger('reset');
+            $('#importCurrencyModal').modal('hide');
+
             $('#currencies-table').dataTable({
             paging: true,
             searching: true,
@@ -260,7 +285,7 @@
             getCurrencies(); // load currencies record
 
             $(document).on('click','.country-btn', function(event) {
-                $('#importCountryModal').modal('show');
+                // $('#importCountryModal').modal('show');
             });
 
             // trigger upload country csv
@@ -297,9 +322,8 @@
                             'BRAVO!!', 
                             'CSV File Data has been Imported Successfully..<br><b>Notice</b> Click OK button to reload the page!', 'success').then(function() {
                                 getCountries();  
+                                window.location.href = 'index.php';
                             }); 
-                            $('#upload_country_form')[0].reset();
-                            // window.location.href = 'index.php';
                          }  
                          else  
                          {  
@@ -348,8 +372,9 @@
                             'BRAVO!!', 
                             'CSV File Data has been Imported Successfully..<br><b>Notice</b> Click OK button to reload the page!', 'success').then(function() {
                                 getCurrencies();  
+                                window.location.href='index.php';
                             }); 
-                            $('#upload_currency_form')[0].reset();
+                            
                          }  
                          else  
                          {  
